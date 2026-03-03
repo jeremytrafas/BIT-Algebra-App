@@ -31,7 +31,6 @@ struct LessonSessionView: View {
                     .font(.headline)
                     .lineLimit(1)
                 Spacer()
-                // Removed Timer Display
                 Text("Trial Mode")
                     .font(.caption)
                     .padding(6)
@@ -76,6 +75,8 @@ struct LessonSessionView: View {
                 else if currentPhase == "scanning" {
                     if DataScannerViewController.isSupported && DataScannerViewController.isAvailable {
                         ZStack(alignment: .bottom) {
+                            
+                            // CAMERA (Standard Orientation)
                             CameraScannerBox(recognizedText: $recognizedText)
                                 .frame(height: 350)
                                 .cornerRadius(15)
@@ -85,7 +86,7 @@ struct LessonSessionView: View {
                                 Text("RAW OCR FEED:")
                                     .font(.caption2)
                                     .bold()
-                                ForEach(recognizedText.components(separatedBy: "\n").suffix(2), id: \.self) { line in
+                                ForEach(recognizedText.components(separatedBy: "\n").suffix(3), id: \.self) { line in
                                     Text(line)
                                         .font(.caption)
                                         .lineLimit(1)
@@ -187,24 +188,22 @@ struct LessonSessionView: View {
     func verifyStep() {
         guard let target = currentStep.targetEquation else { return }
         
-        let studentLines = recognizedText.components(separatedBy: "\n")
-        let cleanTarget = target.lowercased().replacingOccurrences(of: " ", with: "")
+        // 1. Clean the target (remove spaces and newlines)
+        let cleanTarget = target.lowercased()
+            .replacingOccurrences(of: " ", with: "")
+            .replacingOccurrences(of: "\n", with: "")
         
-        var foundMatch = false
+        // 2. Clean everything the camera sees (remove spaces and newlines)
+        let cleanRecognized = recognizedText.lowercased()
+            .replacingOccurrences(of: " ", with: "")
+            .replacingOccurrences(of: "\n", with: "")
         
-        for line in studentLines {
-            let cleanLine = line.lowercased().replacingOccurrences(of: " ", with: "")
-            if cleanLine == cleanTarget {
-                foundMatch = true
-                break
-            }
-        }
-        
-        if foundMatch {
+        // 3. Check if the camera's string contains the target's string
+        if cleanRecognized.contains(cleanTarget) {
             feedbackMessage = "Correct!"
             currentPhase = "success"
             
-            // Audio Feedback
+            // Audio Feedback (1.0s delay for Correct)
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                 self.speak("Correct.")
             }
@@ -213,17 +212,23 @@ struct LessonSessionView: View {
         } else {
             // FAILED ATTEMPT
             if recognizedText.isEmpty {
-                feedbackMessage = "No text detected."
-                speak("No text detected.")
+                feedbackMessage = "No text detected. Check if the camera is covered."
+                speak(feedbackMessage)
             } else {
+                let studentLines = recognizedText.components(separatedBy: "\n")
                 let lastLine = studentLines.last ?? ""
                 feedbackMessage = "Mismatch. Saw: \(lastLine)"
-                speak("Mismatch. I saw: \(lastLine)")
+                
+                // 1.0s Delay before reading the error
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                    self.speak("Mismatch. I saw: \(lastLine)")
+                }
             }
             triggerHaptic(success: false)
         }
     }
     
+    // THE MISSING SPEAK FUNCTION
     func speak(_ text: String) {
         speechSynthesizer.stopSpeaking(at: .immediate)
         let utterance = AVSpeechUtterance(string: text)
@@ -233,6 +238,7 @@ struct LessonSessionView: View {
         speechSynthesizer.speak(utterance)
     }
     
+    // THE HAPTIC FUNCTION
     func triggerHaptic(success: Bool) {
         if enableHaptics {
             let generator = UINotificationFeedbackGenerator()

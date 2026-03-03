@@ -1,26 +1,7 @@
 import SwiftUI
 
-// MARK: - DATA MODELS
-// Restoring these structs so the view knows what a 'Lesson' is.
-
-struct Lesson: Identifiable, Equatable {
-    let id = UUID()
-    let title: String
-    let steps: [LessonStep]
-    let summary: String
-}
-
-struct LessonStep: Identifiable, Equatable {
-    let id = UUID()
-    let instruction: String
-    let targetEquation: String? // Optional: nil means "Reading Only" step
-}
-
-// MARK: - VIEW
-
 struct TeachView: View {
     // THE ENGINEERING POC CURRICULUM
-    // This replaces the old textbook lessons with your 5 technical verification tests.
     let pocDemonstrations = [
         Lesson(
             title: "Demo 1: Character Baseline",
@@ -57,7 +38,7 @@ struct TeachView: View {
             steps: [
                 LessonStep(
                     instruction: "Test 3: Multiple Lines (Simple).\nScan the stack:\n1) 8 + 4 * 2 = 16\n2) 8 + 8 = 16\n3) 16 = 16",
-                    targetEquation: "8+4*2=16" // Detecting the top equation validates the scan
+                    targetEquation: "8+4*2=16\n8+8=16\n16=16"
                 )
             ],
             summary: "Test 3 Complete"
@@ -66,8 +47,9 @@ struct TeachView: View {
             title: "Demo 5: Multi-Line Complex",
             steps: [
                 LessonStep(
-                    instruction: "Test 4: Multiple Lines (Complex).\nScan the stack:\n1) (3 * 2) ^ 2 - 4(6 + 2)\n2) (6)^2 - 4(6 + 2)\n3) (6)^2 - 4(8)",
-                    targetEquation: "(3*2)^2-4(6+2)" // Detecting the top, most complex equation validates the scan
+                    instruction: "Test 4: Multiple Lines (Complex).\nScan the stack:\n1) (3 * 2) ^ 2 - 4(6 + 2)\n2) (6)^2 - 4(6 + 2)\n3) 6 ^ 2 - 4 * 8",
+                    // UPDATED LINE 3 TARGET
+                    targetEquation: "(3*2)^2-4(6+2)\n(6)^2-4(6+2)\n6^2-4*8"
                 )
             ],
             summary: "Test 4 Complete"
@@ -79,7 +61,6 @@ struct TeachView: View {
             List(0..<pocDemonstrations.count, id: \.self) { index in
                 NavigationLink(destination: LessonSessionView(curriculum: pocDemonstrations, lessonIndex: index)) {
                     HStack {
-                        // Using a "Beaker" icon to signify R&D/Testing mode
                         Image(systemName: "flask.fill")
                             .foregroundColor(.purple)
                             .font(.title2)
