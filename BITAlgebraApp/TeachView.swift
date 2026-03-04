@@ -44,16 +44,15 @@ struct TeachView: View {
             summary: "Test 3 Complete"
         ),
         Lesson(
-            title: "Demo 5: Multi-Line Complex",
-            steps: [
-                LessonStep(
-                    instruction: "Test 4: Multiple Lines (Complex).\nScan the stack:\n1) (3 * 2) ^ 2 - 4(6 + 2)\n2) (6)^2 - 4(6 + 2)\n3) 6 ^ 2 - 4 * 8",
-                    // UPDATED LINE 3 TARGET
-                    targetEquation: "(3*2)^2-4(6+2)\n(6)^2-4(6+2)\n6^2-4*8"
-                )
-            ],
-            summary: "Test 4 Complete"
-        )
+                title: "Demo 5: Multi-Line Complex",
+                steps: [
+                    LessonStep(
+                        instruction: "Test 4: Multiple Lines (Complex).\nScan the stack:\n1) (2 ^ 3) + 8 = 16\n2) 8 + 8 = 16\n3) 16 = 16",
+                        targetEquation: "(2^3)+8=16\n8+8=16\n16=16"
+                    )
+                ],
+                summary: "Test 4 Complete"
+            )
     ]
 
     var body: some View {
