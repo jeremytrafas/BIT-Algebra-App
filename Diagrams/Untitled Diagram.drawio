@@ -1,9 +1,60 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36" version="29.6.0">
   <diagram name="Page-1" id="nfsylehQojlGN4yZ6j38">
-    <mxGraphModel>
+    <mxGraphModel dx="901" dy="643" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
+        <mxCell id="ZbJPSMOXNTIah4GjaNd1-40" parent="1" style="whiteSpace=wrap;strokeWidth=2;" value="User Interface" vertex="1">
+          <mxGeometry height="102" width="260" x="123" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="ZbJPSMOXNTIah4GjaNd1-41" parent="1" style="whiteSpace=wrap;strokeWidth=2;" value="Main App Controller&#xa;(Curriculum, Lesson State)" vertex="1">
+          <mxGeometry height="102" width="260" x="268" y="196" as="geometry" />
+        </mxCell>
+        <mxCell id="ZbJPSMOXNTIah4GjaNd1-42" parent="1" style="shape=cylinder3;boundedLbl=1;backgroundOutline=1;size=10;strokeWidth=2;whiteSpace=wrap;" value="Local Database&#xa;(Core Data: Profiles, Lessons, Progress)" vertex="1">
+          <mxGeometry height="134" width="215" x="20" y="372" as="geometry" />
+        </mxCell>
+        <mxCell id="ZbJPSMOXNTIah4GjaNd1-43" parent="1" style="whiteSpace=wrap;strokeWidth=2;" value="OCR&#xa;(Camera Input)" vertex="1">
+          <mxGeometry height="102" width="260" x="433" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="ZbJPSMOXNTIah4GjaNd1-44" parent="1" style="whiteSpace=wrap;strokeWidth=2;" value="Math Evaluation Engine&#xa;(Equation Validation)" vertex="1">
+          <mxGeometry height="78" width="227" x="285" y="400" as="geometry" />
+        </mxCell>
+        <mxCell id="ZbJPSMOXNTIah4GjaNd1-45" parent="1" style="whiteSpace=wrap;strokeWidth=2;" value="Accessibility Subsystem&#xa;(Text-to-Speech)" vertex="1">
+          <mxGeometry height="78" width="254" x="562" y="400" as="geometry" />
+        </mxCell>
+        <mxCell id="ZbJPSMOXNTIah4GjaNd1-46" edge="1" parent="1" source="ZbJPSMOXNTIah4GjaNd1-40" style="curved=1;startArrow=block;endArrow=block;exitX=0.5;exitY=1;entryX=0.18;entryY=0;rounded=0;fontSize=12;startSize=8;endSize=8;" target="ZbJPSMOXNTIah4GjaNd1-41" value="User Action / UI Update">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="253" y="159" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ZbJPSMOXNTIah4GjaNd1-47" edge="1" parent="1" source="ZbJPSMOXNTIah4GjaNd1-41" style="curved=1;startArrow=block;endArrow=block;exitX=0;exitY=0.91;entryX=0.5;entryY=0;rounded=0;fontSize=12;startSize=8;endSize=8;" target="ZbJPSMOXNTIah4GjaNd1-42" value="Read / Write">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="128" y="335" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ZbJPSMOXNTIah4GjaNd1-48" edge="1" parent="1" source="ZbJPSMOXNTIah4GjaNd1-43" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0.87;entryY=0;rounded=0;fontSize=12;startSize=8;endSize=8;" target="ZbJPSMOXNTIah4GjaNd1-41" value="Scanned Equation String">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="563" y="159" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ZbJPSMOXNTIah4GjaNd1-49" edge="1" parent="1" source="ZbJPSMOXNTIah4GjaNd1-41" style="curved=1;startArrow=block;endArrow=block;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;fontSize=12;startSize=8;endSize=8;" target="ZbJPSMOXNTIah4GjaNd1-44" value="Verify Match">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ZbJPSMOXNTIah4GjaNd1-50" edge="1" parent="1" source="ZbJPSMOXNTIah4GjaNd1-41" style="curved=1;startArrow=none;endArrow=block;exitX=1;exitY=0.89;entryX=0.5;entryY=0;rounded=0;fontSize=12;startSize=8;endSize=8;" target="ZbJPSMOXNTIah4GjaNd1-45" value="Trigger Feedback">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="689" y="335" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
