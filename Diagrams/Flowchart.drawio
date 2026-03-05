@@ -1,20 +1,20 @@
-<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36" version="29.6.0">
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36" version="29.6.1">
   <diagram name="Page-1" id="JiBPtEt5dIZ_yqrNQQzV">
-    <mxGraphModel dx="1307" dy="1837" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="1963" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
         <mxCell id="ZBtUTMlbQbWPQq2XUSI--21" parent="1" style="rounded=1;whiteSpace=wrap;arcSize=50;strokeWidth=2;" value="Start App" vertex="1">
-          <mxGeometry height="39" width="91" x="314" y="20" as="geometry" />
+          <mxGeometry height="39" width="91" y="100" as="geometry" />
         </mxCell>
-        <mxCell id="ZBtUTMlbQbWPQq2XUSI--22" parent="1" style="rhombus;strokeWidth=2;whiteSpace=wrap;" value="Choose POC Trial&#xa;(Main Menu)" vertex="1">
-          <mxGeometry height="199" width="199" x="260" y="109" as="geometry" />
+        <mxCell id="ZBtUTMlbQbWPQq2XUSI--22" parent="1" style="rhombus;strokeWidth=2;whiteSpace=wrap;" value="Choose Lesson" vertex="1">
+          <mxGeometry height="99" width="121" x="131" y="70" as="geometry" />
         </mxCell>
         <mxCell id="ZBtUTMlbQbWPQq2XUSI--23" parent="1" style="whiteSpace=wrap;strokeWidth=2;" value="Display Lesson &amp; Target Equation" vertex="1">
-          <mxGeometry height="78" width="260" x="229" y="358" as="geometry" />
+          <mxGeometry height="48.5" width="198" x="272" y="95.25" as="geometry" />
         </mxCell>
         <mxCell id="ZBtUTMlbQbWPQq2XUSI--24" parent="1" style="whiteSpace=wrap;strokeWidth=2;" value="Wait for User to&#xa;Press &#39;Start Test&#39;" vertex="1">
-          <mxGeometry height="78" width="174" x="272" y="486" as="geometry" />
+          <mxGeometry height="68.5" width="144" x="560" y="90" as="geometry" />
         </mxCell>
         <mxCell id="ZBtUTMlbQbWPQq2XUSI--25" parent="1" style="whiteSpace=wrap;strokeWidth=2;" value="Activate VisionKit Camera&#xa;&amp;amp; OCR Engine" vertex="1">
           <mxGeometry height="78" width="245" x="237" y="614" as="geometry" />
@@ -45,26 +45,6 @@
         </mxCell>
         <mxCell id="ZBtUTMlbQbWPQq2XUSI--34" parent="1" style="shape=parallelogram;perimeter=parallelogramPerimeter;fixedSize=1;strokeWidth=2;whiteSpace=wrap;flipH=1;" value="Output &#39;Mismatch&#39;&#xa;Audio &amp;amp; Haptic" vertex="1">
           <mxGeometry height="63" width="205" x="412" y="1522" as="geometry" />
-        </mxCell>
-        <mxCell id="ZBtUTMlbQbWPQq2XUSI--35" edge="1" parent="1" source="ZBtUTMlbQbWPQq2XUSI--21" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;" target="ZBtUTMlbQbWPQq2XUSI--22" value="">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="ZBtUTMlbQbWPQq2XUSI--36" edge="1" parent="1" source="ZBtUTMlbQbWPQq2XUSI--22" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;" target="ZBtUTMlbQbWPQq2XUSI--23" value="">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="ZBtUTMlbQbWPQq2XUSI--37" edge="1" parent="1" source="ZBtUTMlbQbWPQq2XUSI--23" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;" target="ZBtUTMlbQbWPQq2XUSI--24" value="">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="ZBtUTMlbQbWPQq2XUSI--38" edge="1" parent="1" source="ZBtUTMlbQbWPQq2XUSI--24" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;" target="ZBtUTMlbQbWPQq2XUSI--25" value="">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points" />
-          </mxGeometry>
         </mxCell>
         <mxCell id="ZBtUTMlbQbWPQq2XUSI--39" edge="1" parent="1" source="ZBtUTMlbQbWPQq2XUSI--25" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;" target="ZBtUTMlbQbWPQq2XUSI--26" value="">
           <mxGeometry relative="1" as="geometry">
