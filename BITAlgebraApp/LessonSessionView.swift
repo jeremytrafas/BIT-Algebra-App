@@ -14,12 +14,14 @@ struct LessonSessionView: View {
     
     // ACCESSIBILITY & AUDIO
     @AccessibilityFocusState private var isHeaderFocused: Bool
+    @AccessibilityFocusState private var isCheckScanFocused: Bool
     @State private var speechSynthesizer = AVSpeechSynthesizer()
     
     // SESSION STATE
     @State private var currentPhase = "instruction" // phases: instruction, scanning, success
     @State private var recognizedText: String = ""
     @State private var feedbackMessage: String = ""
+    @State private var scannerRefreshID = UUID() // <--- The ID used to refresh the camera
     
     var currentStep: LessonStep { lesson.steps[0] } // POC only has 1 step per demo
     
@@ -78,6 +80,7 @@ struct LessonSessionView: View {
                             
                             // CAMERA (Standard Orientation)
                             CameraScannerBox(recognizedText: $recognizedText)
+                                .id(scannerRefreshID) // <--- ATTACHED THE REFRESH ID HERE
                                 .frame(height: 350)
                                 .cornerRadius(15)
                             
@@ -114,6 +117,7 @@ struct LessonSessionView: View {
                                 .foregroundColor(.white)
                                 .cornerRadius(15)
                         }
+                        .accessibilityFocused($isCheckScanFocused)
                         .padding()
                         
                     } else {
@@ -172,6 +176,9 @@ struct LessonSessionView: View {
         currentPhase = "scanning"
         feedbackMessage = ""
         recognizedText = ""
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                    isCheckScanFocused = true
+                }
     }
     
     func resetTrial() {
@@ -225,6 +232,10 @@ struct LessonSessionView: View {
                 }
             }
             triggerHaptic(success: false)
+            
+            // DUMP THE OCR CACHE AND REFRESH:
+            scannerRefreshID = UUID() // <--- This forces the camera view to reboot
+            recognizedText = ""       // <--- This clears the bad text from your debug UI
         }
     }
     
