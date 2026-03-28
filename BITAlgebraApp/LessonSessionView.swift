@@ -11,17 +11,22 @@ struct LessonSessionView: View {
     
     // SETTINGS
     @AppStorage("enableHaptics") private var enableHaptics: Bool = true
+    @AppStorage("spellOutEquations") private var spellOutEquations: Bool = false
     
     // ACCESSIBILITY & AUDIO
     @AccessibilityFocusState private var isHeaderFocused: Bool
     @AccessibilityFocusState private var isCheckScanFocused: Bool
     @State private var speechSynthesizer = AVSpeechSynthesizer()
     
+    // DYNAMIC TYPE METRICS
+    @ScaledMetric private var checkmarkSize: CGFloat = 60
+    @ScaledMetric private var equationTextSize: CGFloat = 24
+    
     // SESSION STATE
     @State private var currentPhase = "instruction" // phases: instruction, scanning, success
     @State private var recognizedText: String = ""
     @State private var feedbackMessage: String = ""
-    @State private var scannerRefreshID = UUID() // <--- The ID used to refresh the camera
+    @State private var scannerRefreshID = UUID()
     
     var currentStep: LessonStep { lesson.steps[0] } // POC only has 1 step per demo
     
@@ -31,14 +36,15 @@ struct LessonSessionView: View {
             HStack {
                 Text(lesson.title)
                     .font(.headline)
-                    .lineLimit(1)
+                    .fixedSize(horizontal: false, vertical: true)
                 Spacer()
                 Text("Trial Mode")
                     .font(.caption)
+                    .bold()
                     .padding(6)
-                    .background(Color.gray.opacity(0.1))
+                    .background(Color.black)
+                    .foregroundColor(.white)
                     .cornerRadius(8)
-                    .foregroundColor(.gray)
             }
             .padding()
             .accessibilityAddTraits(.isHeader)
@@ -48,13 +54,38 @@ struct LessonSessionView: View {
             // MAIN CONTENT
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
+                    
+                    // 1. Read Normal Instruction
                     Text(currentStep.instruction)
                         .font(.title2)
                         .fontWeight(.medium)
                         .fixedSize(horizontal: false, vertical: true)
-                        .padding()
                         .accessibilityFocused($isHeaderFocused)
+                    
+                    // 2. Read Target Equation Token-by-Token
+                    if let target = currentStep.targetEquation {
+                        if spellOutEquations {
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack(spacing: 2) {
+                                    let tokens = tokenizeEquation(target) // <--- USE TOKENIZER HERE
+                                    ForEach(Array(tokens.enumerated()), id: \.offset) { index, token in
+                                        Text(token)
+                                            .font(.system(size: equationTextSize, weight: .bold, design: .monospaced))
+                                            .foregroundColor(.purple)
+                                            .accessibilityElement(children: .ignore)
+                                            .accessibilityLabel(token)
+                                    }
+                                }
+                                .padding(.vertical, 8)
+                            }
+                        } else {
+                            Text(target)
+                                .font(.system(size: equationTextSize, weight: .bold, design: .monospaced))
+                                .foregroundColor(.purple)
+                        }
+                    }
                 }
+                .padding(.horizontal)
             }
             
             // ACTION AREA
@@ -80,7 +111,7 @@ struct LessonSessionView: View {
                             
                             // CAMERA (Standard Orientation)
                             CameraScannerBox(recognizedText: $recognizedText)
-                                .id(scannerRefreshID) // <--- ATTACHED THE REFRESH ID HERE
+                                .id(scannerRefreshID)
                                 .frame(height: 350)
                                 .cornerRadius(15)
                             
@@ -92,12 +123,12 @@ struct LessonSessionView: View {
                                 ForEach(recognizedText.components(separatedBy: "\n").suffix(3), id: \.self) { line in
                                     Text(line)
                                         .font(.caption)
-                                        .lineLimit(1)
+                                        .fixedSize(horizontal: false, vertical: true)
                                 }
                             }
                             .padding(8)
                             .frame(maxWidth: .infinity)
-                            .background(Color.black.opacity(0.6))
+                            .background(Color.black.opacity(0.85))
                             .foregroundColor(.white)
                             .cornerRadius(8)
                             .padding(.bottom, 10)
@@ -129,11 +160,12 @@ struct LessonSessionView: View {
                 else if currentPhase == "success" {
                     VStack(spacing: 20) {
                         Image(systemName: "checkmark.seal.fill")
-                            .font(.system(size: 60))
+                            .font(.system(size: checkmarkSize))
                             .foregroundColor(.green)
                         
                         Text("Verification Passed")
                             .font(.headline)
+                            .fixedSize(horizontal: false, vertical: true)
                         
                         Button(action: {
                             resetTrial()
@@ -155,9 +187,10 @@ struct LessonSessionView: View {
             if !feedbackMessage.isEmpty {
                 Text(feedbackMessage)
                     .font(.headline)
-                    .foregroundColor(feedbackMessage.contains("Correct") ? .green : .red)
+                    .foregroundColor(feedbackMessage.contains("Correct") ? Color(UIColor.systemGreen) : Color(UIColor.systemRed))
                     .padding()
                     .multilineTextAlignment(.center)
+                    .fixedSize(horizontal: false, vertical: true)
             }
         }
         .onAppear {
@@ -171,14 +204,14 @@ struct LessonSessionView: View {
     }
     
     // MARK: - LOGIC
-    
     func startTest() {
         currentPhase = "scanning"
         feedbackMessage = ""
         recognizedText = ""
+        
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
-                    isCheckScanFocused = true
-                }
+            isCheckScanFocused = true
+        }
     }
     
     func resetTrial() {
@@ -186,7 +219,6 @@ struct LessonSessionView: View {
         recognizedText = ""
         feedbackMessage = ""
         
-        // Force VoiceOver focus back to instructions
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             isHeaderFocused = true
         }
@@ -195,29 +227,24 @@ struct LessonSessionView: View {
     func verifyStep() {
         guard let target = currentStep.targetEquation else { return }
         
-        // 1. Clean the target (remove spaces and newlines)
         let cleanTarget = target.lowercased()
             .replacingOccurrences(of: " ", with: "")
             .replacingOccurrences(of: "\n", with: "")
         
-        // 2. Clean everything the camera sees (remove spaces and newlines)
         let cleanRecognized = recognizedText.lowercased()
             .replacingOccurrences(of: " ", with: "")
             .replacingOccurrences(of: "\n", with: "")
         
-        // 3. Check if the camera's string contains the target's string
         if cleanRecognized.contains(cleanTarget) {
             feedbackMessage = "Correct!"
             currentPhase = "success"
             
-            // Audio Feedback (1.0s delay for Correct)
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                 self.speak("Correct.")
             }
             triggerHaptic(success: true)
             
         } else {
-            // FAILED ATTEMPT
             if recognizedText.isEmpty {
                 feedbackMessage = "No text detected. Check if the camera is covered."
                 speak(feedbackMessage)
@@ -226,20 +253,17 @@ struct LessonSessionView: View {
                 let lastLine = studentLines.last ?? ""
                 feedbackMessage = "Mismatch. Saw: \(lastLine)"
                 
-                // 1.0s Delay before reading the error
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                     self.speak("Mismatch. I saw: \(lastLine)")
                 }
             }
             triggerHaptic(success: false)
             
-            // DUMP THE OCR CACHE AND REFRESH:
-            scannerRefreshID = UUID() // <--- This forces the camera view to reboot
-            recognizedText = ""       // <--- This clears the bad text from your debug UI
+            scannerRefreshID = UUID()
+            recognizedText = ""
         }
     }
     
-    // THE MISSING SPEAK FUNCTION
     func speak(_ text: String) {
         speechSynthesizer.stopSpeaking(at: .immediate)
         let utterance = AVSpeechUtterance(string: text)
@@ -249,17 +273,38 @@ struct LessonSessionView: View {
         speechSynthesizer.speak(utterance)
     }
     
-    // THE HAPTIC FUNCTION
     func triggerHaptic(success: Bool) {
         if enableHaptics {
             let generator = UINotificationFeedbackGenerator()
             generator.notificationOccurred(success ? .success : .error)
         }
     }
+    
+    // <--- NEW TOKENIZER FUNCTION --->
+    func tokenizeEquation(_ equation: String) -> [String] {
+        var tokens: [String] = []
+        var currentNumber = ""
+        
+        for char in equation {
+            if char.isNumber {
+                currentNumber.append(char)
+            } else {
+                if !currentNumber.isEmpty {
+                    tokens.append(currentNumber)
+                    currentNumber = ""
+                }
+                tokens.append(String(char))
+            }
+        }
+        if !currentNumber.isEmpty {
+            tokens.append(currentNumber)
+        }
+        return tokens
+    }
 }
 
 // MARK: - HELPER VIEWS & SCANNER
-
+// [Keep SimulatorInputBox, CameraScannerBox, and ScannerViewControllerRepresentable exactly the same]
 struct SimulatorInputBox: View {
     @Binding var recognizedText: String
     var body: some View {

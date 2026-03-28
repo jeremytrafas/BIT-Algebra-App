@@ -7,7 +7,7 @@ struct TeachView: View {
             title: "Demo 1: Character Baseline",
             steps: [
                 LessonStep(
-                    instruction: "Objective: Verify detection of all digits.\nTarget: 0123456789",
+                    instruction: "Objective: Verify detection of all digits. Create the equation below:",
                     targetEquation: "0123456789"
                 )
             ],
@@ -17,7 +17,7 @@ struct TeachView: View {
             title: "Demo 2: Single Line Simple",
             steps: [
                 LessonStep(
-                    instruction: "Test 1: Single Line Simple Equation.\nScan: 8 + 4 = 12",
+                    instruction: "Test 1: Single Line Simple Equation. Create the equation below:",
                     targetEquation: "8+4=12"
                 )
             ],
@@ -27,7 +27,7 @@ struct TeachView: View {
             title: "Demo 3: Single Line Complex",
             steps: [
                 LessonStep(
-                    instruction: "Test 2: Single Line Complex Equation.\nScan: (3 * 4) ^ 2 * x = 89",
+                    instruction: "Test 2: Single Line Complex Equation. Create the equation below:",
                     targetEquation: "(3*4)^2*x=89"
                 )
             ],
@@ -37,7 +37,7 @@ struct TeachView: View {
             title: "Demo 4: Multi-Line Simple",
             steps: [
                 LessonStep(
-                    instruction: "Test 3: Multiple Lines (Simple).\nScan the stack:\n1) 8 + 4 * 2 = 16\n2) 8 + 8 = 16\n3) 16 = 16",
+                    instruction: "Test 3: Multiple Lines (Simple). Create the equation below:",
                     targetEquation: "8+4*2=16\n8+8=16\n16=16"
                 )
             ],
@@ -47,7 +47,7 @@ struct TeachView: View {
                 title: "Demo 5: Multi-Line Complex",
                 steps: [
                     LessonStep(
-                        instruction: "Test 4: Multiple Lines (Complex).\nScan the stack:\n1) (2 ^ 3) + 8 = 16\n2) 8 + 8 = 16\n3) 16 = 16",
+                        instruction: "Test 4: Multiple Lines (Complex). Create the equation below:",
                         targetEquation: "(2^3)+8=16\n8+8=16\n16=16"
                     )
                 ],
@@ -67,9 +67,12 @@ struct TeachView: View {
                         VStack(alignment: .leading) {
                             Text(pocDemonstrations[index].title)
                                 .font(.headline)
+                                .fixedSize(horizontal: false, vertical: true)
+                            
                             Text("Verification Trial")
                                 .font(.caption)
                                 .foregroundColor(.gray)
+                                .fixedSize(horizontal: false, vertical: true)
                         }
                     }
                     .padding(.vertical, 8)

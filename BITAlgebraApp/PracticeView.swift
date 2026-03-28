@@ -2,11 +2,16 @@ import SwiftUI
 import VisionKit
 
 struct PracticeView: View {
-    // SETTINGS (Haptics only)
+    // SETTINGS (Haptics & Audio)
     @AppStorage("enableHaptics") private var enableHaptics: Bool = true
+    @AppStorage("spellOutEquations") private var spellOutEquations: Bool = false
+    
+    // DYNAMIC TYPE METRICS
+    @ScaledMetric private var equationTextSize: CGFloat = 30
+    @ScaledMetric private var giantIconSize: CGFloat = 100
     
     // STATE VARIABLES
-    @State private var currentPhase = "input" // phases: input, solving, success
+    @State private var currentPhase = "input"
     @State private var recognizedText: String = ""
     @State private var feedbackMessage: String = ""
     
@@ -20,6 +25,7 @@ struct PracticeView: View {
             // HEADER
             Text("Practice Mode")
                 .font(.headline)
+                .fixedSize(horizontal: false, vertical: true)
                 .accessibilityAddTraits(.isHeader)
                 .padding()
             
@@ -30,14 +36,18 @@ struct PracticeView: View {
                         Text("Create Your Own Problem")
                             .font(.largeTitle)
                             .bold()
+                            .fixedSize(horizontal: false, vertical: true)
                         
                         Text("Use the tiles to build any linear equation (like 2x + 4 = 10). Then scan it.")
                             .font(.title2)
+                            .fixedSize(horizontal: false, vertical: true)
                             .padding()
                         
                         if DataScannerViewController.isSupported && DataScannerViewController.isAvailable {
                             CameraScannerBox(recognizedText: $recognizedText)
                                 .frame(height: 300)
+                                .cornerRadius(15)
+                                .padding(.horizontal)
                         } else {
                             SimulatorInputBox(recognizedText: $recognizedText)
                         }
@@ -46,8 +56,9 @@ struct PracticeView: View {
                             Text(feedbackMessage)
                                 .font(.title3)
                                 .fontWeight(.bold)
-                                .foregroundColor(.red)
+                                .foregroundColor(Color(UIColor.systemRed))
                                 .padding()
+                                .fixedSize(horizontal: false, vertical: true)
                                 .accessibilityLabel(feedbackMessage)
                         }
                         
@@ -83,19 +94,42 @@ struct PracticeView: View {
                         if showStep {
                             // VISIBLE STATE
                             VStack(spacing: 20) {
-                                // 1. The Instruction
+                                // 1. The Instruction (Read normally)
                                 Text(steps[currentStepIndex].instruction)
                                     .font(.title)
                                     .bold()
                                     .multilineTextAlignment(.center)
+                                    .fixedSize(horizontal: false, vertical: true)
                                     .padding()
                                     .background(Color.yellow.opacity(0.2))
                                     .cornerRadius(15)
                                 
-                                // 2. The Answer
-                                Text("Answer: " + steps[currentStepIndex].targetState)
-                                    .font(.system(size: 30, weight: .heavy, design: .monospaced))
-                                    .foregroundColor(.blue)
+                                // 2. The Answer Label (Read normally)
+                                Text("Answer:")
+                                    .font(.headline)
+                                    .foregroundColor(.gray)
+                                    .accessibilityAddTraits(.isHeader)
+                                
+                                // 3. The Equation (Token-by-Token logic)
+                                if spellOutEquations {
+                                    ScrollView(.horizontal, showsIndicators: false) {
+                                        HStack(spacing: 2) {
+                                            let tokens = tokenizeEquation(steps[currentStepIndex].targetState) // <--- USE TOKENIZER HERE
+                                            ForEach(Array(tokens.enumerated()), id: \.offset) { index, token in
+                                                Text(token)
+                                                    .font(.system(size: equationTextSize, weight: .heavy, design: .monospaced))
+                                                    .foregroundColor(.blue)
+                                                    .accessibilityElement(children: .ignore)
+                                                    .accessibilityLabel(token)
+                                            }
+                                        }
+                                        .padding(.horizontal)
+                                    }
+                                } else {
+                                    Text(steps[currentStepIndex].targetState)
+                                        .font(.system(size: equationTextSize, weight: .heavy, design: .monospaced))
+                                        .foregroundColor(.blue)
+                                }
                                 
                                 // Hide Button
                                 Button(action: {
@@ -107,7 +141,7 @@ struct PracticeView: View {
                                         .padding(10)
                                 }
                             }
-                            .accessibilityElement(children: .combine)
+                            
                         } else {
                             // HIDDEN STATE
                             Button(action: {
@@ -118,6 +152,7 @@ struct PracticeView: View {
                                         .font(.largeTitle)
                                     Text("Reveal Step & Answer")
                                         .font(.headline)
+                                        .fixedSize(horizontal: false, vertical: true)
                                 }
                                 .padding()
                                 .frame(maxWidth: .infinity)
@@ -127,13 +162,15 @@ struct PracticeView: View {
                             }
                             .padding(.horizontal)
                             .accessibilityLabel("Reveal Next Step")
-                            .accessibilityHint("Double tap to reveal the instruction and answer")
+                            .accessibilityHint("Press confirm to reveal the instruction and answer")
                         }
                         
                         // Input Area
                         if DataScannerViewController.isSupported && DataScannerViewController.isAvailable {
                             CameraScannerBox(recognizedText: $recognizedText)
                                 .frame(height: 250)
+                                .cornerRadius(15)
+                                .padding(.horizontal)
                         } else {
                             SimulatorInputBox(recognizedText: $recognizedText)
                         }
@@ -142,8 +179,9 @@ struct PracticeView: View {
                             Text(feedbackMessage)
                                 .font(.title3)
                                 .fontWeight(.bold)
-                                .foregroundColor(feedbackMessage.contains("Correct") ? .green : .red)
+                                .foregroundColor(feedbackMessage.contains("Correct") ? Color(UIColor.systemGreen) : Color(UIColor.systemRed))
                                 .padding()
+                                .fixedSize(horizontal: false, vertical: true)
                                 .accessibilityLabel(feedbackMessage)
                         }
                         
@@ -152,10 +190,11 @@ struct PracticeView: View {
                         }) {
                             Text("Check My Board")
                                 .font(.title2)
+                                .bold()
                                 .padding()
                                 .frame(maxWidth: .infinity)
                                 .background(Color.green)
-                                .foregroundColor(.white)
+                                .foregroundColor(.black)
                                 .cornerRadius(15)
                         }
                         .padding()
@@ -167,23 +206,27 @@ struct PracticeView: View {
             else if currentPhase == "success" {
                 VStack(spacing: 30) {
                     Image(systemName: "star.fill")
-                        .font(.system(size: 100))
+                        .font(.system(size: giantIconSize))
                         .foregroundColor(.yellow)
                     
                     Text("Equation Solved!")
                         .font(.largeTitle)
                         .bold()
+                        .fixedSize(horizontal: false, vertical: true)
                     
                     Text("You found the value of X.")
                         .font(.title2)
+                        .fixedSize(horizontal: false, vertical: true)
                     
                     Button(action: {
                         resetPractice()
                     }) {
                         Text("Solve Another Problem")
                             .font(.title2)
+                            .bold()
                             .padding()
                             .background(Color.blue.opacity(0.2))
+                            .foregroundColor(.black)
                             .cornerRadius(10)
                     }
                 }
@@ -192,7 +235,6 @@ struct PracticeView: View {
     }
     
     // MARK: - LOGIC FUNCTIONS
-    
     func processInitialEquation() {
         let clean = recognizedText.lowercased().replacingOccurrences(of: " ", with: "")
         
@@ -247,6 +289,28 @@ struct PracticeView: View {
             generator.notificationOccurred(success ? .success : .error)
         }
     }
+    
+    // <--- NEW TOKENIZER FUNCTION --->
+    func tokenizeEquation(_ equation: String) -> [String] {
+        var tokens: [String] = []
+        var currentNumber = ""
+        
+        for char in equation {
+            if char.isNumber {
+                currentNumber.append(char)
+            } else {
+                if !currentNumber.isEmpty {
+                    tokens.append(currentNumber)
+                    currentNumber = ""
+                }
+                tokens.append(String(char))
+            }
+        }
+        if !currentNumber.isEmpty {
+            tokens.append(currentNumber)
+        }
+        return tokens
+    }
 }
 
 // MARK: - MATH ENGINE
@@ -278,7 +342,6 @@ struct LinearEquationSolver {
         var calculatedSteps: [EquationStep] = []
         var currentRHS = c
         
-        // Step 1: Add/Sub
         if b != 0 {
             if b > 0 {
                 currentRHS -= b
@@ -289,7 +352,6 @@ struct LinearEquationSolver {
             }
         }
         
-        // Step 2: Divide
         if a != 1 && a != 0 {
             let finalResult = currentRHS / a
             calculatedSteps.append(EquationStep(instruction: "Divide both sides by \(a)", targetState: "x=\(finalResult)"))

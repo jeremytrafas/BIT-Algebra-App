@@ -3,13 +3,17 @@ import SwiftUI
 struct SettingsView: View {
     // These variables automatically save to the user's phone
     @AppStorage("enableHaptics") private var enableHaptics: Bool = true
+    @AppStorage("spellOutEquations") private var spellOutEquations: Bool = false
     
     var body: some View {
         Form {
             // SECTION 1: FEEDBACK
-            Section(header: Text("Feedback")) {
+            Section(header: Text("Accessibility & Feedback")) {
                 Toggle("Vibration (Haptics)", isOn: $enableHaptics)
                     .accessibilityHint("Vibrates phone on successful scans")
+                
+                Toggle("Spell Out Equations", isOn: $spellOutEquations)
+                    .accessibilityHint("Forces VoiceOver to read math character by character")
                 
                 Text("Voice guidance is handled by your system VoiceOver settings.")
                     .font(.caption)
