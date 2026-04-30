@@ -1,11 +1,11 @@
 # BIT Learning Suite (Algebra, Physics, & Geometry)
 
 ## Overview
-The BIT Learning Suite is an accessible, iOS-based educational application designed to help visually impaired students independently learn algebra, physics, and geometry. The application works in tandem with a physical kit—including a device stand, a magnetic workspace, and 3D-printed tactile characters. By utilizing Apple's VisionKit and AVFoundation frameworks, the app translates physical equations built on the workspace into audible feedback via VoiceOver.
+The BIT Learning Suite is an accessible, iOS-based educational application designed to help visually impaired students independently learn algebra, physics, and geometry. The application works with a physical kit, including a device stand, a magnetic workspace, and 3D-printed tactile characters. By utilizing Apple's VisionKit and AVFoundation frameworks, the app translates physical equations built on the workspace into audible feedback via VoiceOver.
 
 ## System Requirements & Dependencies
 * **Language/Framework:** Swift / SwiftUI
-* **Target OS:** iOS 18.0 or later
+* **Target OS:** iOS 26.0 or later
 * **Development Environment:** Xcode 26.1+
 * **Core Dependencies (Native Apple Frameworks):**
   * `VisionKit` / `DataScannerViewController`: Used for Optical Character Recognition (OCR) of the 3D-printed characters.
