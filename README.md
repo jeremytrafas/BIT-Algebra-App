@@ -30,11 +30,11 @@ The BIT Learning Suite incorporates and builds upon foundational work from previ
 * **Ryan Hernandez:** Original development of the interactive Physics application.
 
 ## Financial Considerations
-* **Apple Developer Program:** Distributing this application to user devices via TestFlight or the App Store requires an active Apple Developer Program membership, which incurs an annual fee of $99.
+* **Apple Developer Program:** Distributing this application to user devices via TestFlight or the App Store requires an active Apple Developer Program membership, which has an annual fee of $99.
 
 ---
 
-## Operating Instructions (End User)
+## Operating Instructions 
 1. **Setup:** Assemble the physical device stand and the magnetic workspace. Place the iOS device securely in the stand so the rear camera faces the board.
 2. **Launch:** Open the BIT app and select the desired subject (Algebra, Physics, or Geometry) from the main menu.
 3. **Build:** Listen to the VoiceOver instruction, then use the 3D-printed magnetic characters to build the corresponding equation on the board.
