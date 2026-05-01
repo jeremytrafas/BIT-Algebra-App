@@ -1,7 +1,7 @@
 # BIT Learning Suite (Algebra, Physics, & Geometry)
 
 ## Overview
-The BIT Learning Suite is an accessible, iOS-based educational application designed to help visually impaired students independently learn algebra, physics, and geometry. The application works with a physical kit, including a device stand, a magnetic workspace, and 3D-printed tactile characters. By utilizing Apple's VisionKit and AVFoundation frameworks, the app translates physical equations built on the workspace into audible feedback via VoiceOver.
+The BIT Learning Suite is an accessible, iOS-based educational application designed to help visually impaired students independently learn algebra, physics, and geometry. The algebra module works with a physical kit, including a device stand, a magnetic workspace, and 3D-printed tactile characters. By utilizing Apple's VisionKit and AVFoundation frameworks, the app translates physical equations built on the workspace into audible feedback via VoiceOver.
 
 ## System Requirements & Dependencies
 * **Language/Framework:** Swift / SwiftUI
@@ -15,11 +15,16 @@ The BIT Learning Suite is an accessible, iOS-based educational application desig
 ## File Standards
 All source code files within this repository require standard header blocks denoting the project name, author, and date of creation/modification to maintain version control and traceability.
 
-## Flowcharts & Architecture
-*(Upload your system flowcharts to the repository and link them below)*
-* **[INSERT LINK: System Data Flowchart]** - Details the data pathway from camera capture to math engine verification.
-* **[INSERT LINK: OCR Verification Logic]** - Details the algorithm used to parse multiline linear equations.
-* **[INSERT LINK: UI Navigation Tree]** - Details the user pathways between Algebra, Physics, and Geometry modules.
+## Software Architecture & Flowchart 
+* **Software Architecture** - Details the interactions of the 6 software components in the algebra module.
+
+<img width="708" height="428" alt="image" src="https://github.com/user-attachments/assets/cb1fdb19-f02e-450b-9b5e-48355f519d5b" />
+
+* **Teach Mode Flowchart** - Details the step-by-step journey of a student using the algebra teach module.
+
+<img width="708" height="807" alt="image" src="https://github.com/user-attachments/assets/ae1c3f2e-81dc-4792-8b27-adb148e44c06" />
+
+
 
 ## Team Responsibilities
 * **Jeremy Trafas:** Lead Software Engineer. Responsible for overall system architecture, integrating Apple VisionKit for high-accuracy OCR, developing the custom math verification engine, configuring AVSpeechSynthesizer for accessibility, merging legacy modules (Physics/Geometry), and designing the unified SwiftUI interface. 
