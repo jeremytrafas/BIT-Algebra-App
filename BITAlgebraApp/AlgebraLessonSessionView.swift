@@ -2,12 +2,12 @@ import SwiftUI
 import VisionKit
 import AVFoundation
 
-struct LessonSessionView: View {
+struct AlgebraLessonSessionView: View {
     // DATA PASSED IN
-    let curriculum: [Lesson]
+    let curriculum: [AlgebraLesson]
     let lessonIndex: Int
     
-    var lesson: Lesson { curriculum[lessonIndex] }
+    var lesson: AlgebraLesson { curriculum[lessonIndex] }
     
     // SETTINGS
     @AppStorage("enableHaptics") private var enableHaptics: Bool = true
@@ -28,7 +28,7 @@ struct LessonSessionView: View {
     @State private var feedbackMessage: String = ""
     @State private var scannerRefreshID = UUID()
     
-    var currentStep: LessonStep { lesson.steps[0] } // POC only has 1 step per demo
+    var currentStep: AlgebraLessonStep { lesson.steps[0] } // POC only has 1 step per demo
     
     var body: some View {
         VStack {

@@ -1,12 +1,12 @@
 import Foundation
 
-struct Lesson {
+struct AlgebraLesson {
     let title: String
-    let steps: [LessonStep]
+    let steps: [AlgebraLessonStep]
     let summary: String
 }
 
-struct LessonStep {
+struct AlgebraLessonStep {
     let instruction: String
     let targetEquation: String?
 }

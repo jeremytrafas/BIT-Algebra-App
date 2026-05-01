@@ -1,7 +1,7 @@
 import SwiftUI
 import VisionKit
 
-struct PracticeView: View {
+struct AlgebraPracticeView: View {
     // SETTINGS (Haptics & Audio)
     @AppStorage("enableHaptics") private var enableHaptics: Bool = true
     @AppStorage("spellOutEquations") private var spellOutEquations: Bool = false

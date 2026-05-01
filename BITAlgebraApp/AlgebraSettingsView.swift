@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct SettingsView: View {
+struct AlgebraSettingsView: View {
     // These variables automatically save to the user's phone
     @AppStorage("enableHaptics") private var enableHaptics: Bool = true
     @AppStorage("spellOutEquations") private var spellOutEquations: Bool = false
@@ -38,5 +38,5 @@ struct SettingsView: View {
 }
 
 #Preview {
-    SettingsView()
+    AlgebraSettingsView()
 }

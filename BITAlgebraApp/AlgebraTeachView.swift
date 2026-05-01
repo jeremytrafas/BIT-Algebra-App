@@ -1,52 +1,52 @@
 import SwiftUI
 
-struct TeachView: View {
+struct AlgebraTeachView: View {
     // THE ENGINEERING POC CURRICULUM
     let pocDemonstrations = [
-        Lesson(
+        AlgebraLesson(
             title: "Demo 1: Character Baseline",
             steps: [
-                LessonStep(
+                AlgebraLessonStep(
                     instruction: "Objective: Verify detection of all digits. Create the equation below:",
                     targetEquation: "0123456789"
                 )
             ],
             summary: "Baseline Character Test Complete"
         ),
-        Lesson(
+        AlgebraLesson(
             title: "Demo 2: Single Line Simple",
             steps: [
-                LessonStep(
+                AlgebraLessonStep(
                     instruction: "Test 1: Single Line Simple Equation. Create the equation below:",
                     targetEquation: "8+4=12"
                 )
             ],
             summary: "Test 1 Complete"
         ),
-        Lesson(
+        AlgebraLesson(
             title: "Demo 3: Single Line Complex",
             steps: [
-                LessonStep(
+                AlgebraLessonStep(
                     instruction: "Test 2: Single Line Complex Equation. Create the equation below:",
                     targetEquation: "(3*4)^2*x=89"
                 )
             ],
             summary: "Test 2 Complete"
         ),
-        Lesson(
+        AlgebraLesson(
             title: "Demo 4: Multi-Line Simple",
             steps: [
-                LessonStep(
+                AlgebraLessonStep(
                     instruction: "Test 3: Multiple Lines (Simple). Create the equation below:",
                     targetEquation: "8+4*2=16\n8+8=16\n16=16"
                 )
             ],
             summary: "Test 3 Complete"
         ),
-        Lesson(
+        AlgebraLesson(
                 title: "Demo 5: Multi-Line Complex",
                 steps: [
-                    LessonStep(
+                    AlgebraLessonStep(
                         instruction: "Test 4: Multiple Lines (Complex). Create the equation below:",
                         targetEquation: "(2^3)+8=16\n8+8=16\n16=16"
                     )
@@ -58,7 +58,7 @@ struct TeachView: View {
     var body: some View {
         NavigationView {
             List(0..<pocDemonstrations.count, id: \.self) { index in
-                NavigationLink(destination: LessonSessionView(curriculum: pocDemonstrations, lessonIndex: index)) {
+                NavigationLink(destination: AlgebraLessonSessionView(curriculum: pocDemonstrations, lessonIndex: index)) {
                     HStack {
                         Image(systemName: "flask.fill")
                             .foregroundColor(.purple)

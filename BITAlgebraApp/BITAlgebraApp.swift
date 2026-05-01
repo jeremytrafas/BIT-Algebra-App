@@ -8,10 +8,11 @@
 import SwiftUI
 
 @main
-struct GeminiVibecodeTest1App: App {
+struct BITAlgebraApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
         }
     }
 }
+
