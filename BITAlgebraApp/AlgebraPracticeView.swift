@@ -1,35 +1,40 @@
+// Project: BIT Algebra
+// Author: Jeremy Trafas
+// Date: 2026-05-01
+
 import SwiftUI
 import VisionKit
 
+// Practice mode for scanning and solving user-provided equations.
 struct AlgebraPracticeView: View {
-    // SETTINGS (Haptics & Audio)
+    // User preferences for haptics and equation spelling.
     @AppStorage("enableHaptics") private var enableHaptics: Bool = true
     @AppStorage("spellOutEquations") private var spellOutEquations: Bool = false
     
-    // DYNAMIC TYPE METRICS
+    // Dynamic type metrics for larger UI elements.
     @ScaledMetric private var equationTextSize: CGFloat = 30
     @ScaledMetric private var giantIconSize: CGFloat = 100
     
-    // STATE VARIABLES
+    // View state for phases, OCR text, and feedback.
     @State private var currentPhase = "input"
     @State private var recognizedText: String = ""
     @State private var feedbackMessage: String = ""
     
-    // SOLVER VARIABLES
+    // Linear solver state and reveal control.
     @State private var steps: [EquationStep] = []
     @State private var currentStepIndex = 0
     @State private var showStep: Bool = false
     
     var body: some View {
         VStack {
-            // HEADER
+            // Header title for practice mode.
             Text("Practice Mode")
                 .font(.headline)
                 .fixedSize(horizontal: false, vertical: true)
                 .accessibilityAddTraits(.isHeader)
                 .padding()
             
-            // PHASE 1: INPUT THE PROBLEM
+            // Phase 1: Input and scan the equation.
             if currentPhase == "input" {
                 ScrollView {
                     VStack(spacing: 20) {
@@ -43,6 +48,7 @@ struct AlgebraPracticeView: View {
                             .fixedSize(horizontal: false, vertical: true)
                             .padding()
                         
+                        // Live camera or simulator input for OCR.
                         if DataScannerViewController.isSupported && DataScannerViewController.isAvailable {
                             CameraScannerBox(recognizedText: $recognizedText)
                                 .frame(height: 300)
@@ -62,6 +68,7 @@ struct AlgebraPracticeView: View {
                                 .accessibilityLabel(feedbackMessage)
                         }
                         
+                        // Begin processing the scanned equation.
                         Button(action: {
                             processInitialEquation()
                         }) {
@@ -80,7 +87,7 @@ struct AlgebraPracticeView: View {
                 }
             }
             
-            // PHASE 2: STEP-BY-STEP GUIDANCE
+            // Phase 2: Step-by-step solving with optional reveal.
             else if currentPhase == "solving" {
                 ScrollView {
                     VStack(spacing: 20) {
@@ -90,11 +97,9 @@ struct AlgebraPracticeView: View {
                             .foregroundColor(.gray)
                             .padding(.top)
                         
-                        // --- THE REVEAL SECTION ---
+                        // Toggle to reveal or hide the current step and target state.
                         if showStep {
-                            // VISIBLE STATE
                             VStack(spacing: 20) {
-                                // 1. The Instruction (Read normally)
                                 Text(steps[currentStepIndex].instruction)
                                     .font(.title)
                                     .bold()
@@ -104,17 +109,15 @@ struct AlgebraPracticeView: View {
                                     .background(Color.yellow.opacity(0.2))
                                     .cornerRadius(15)
                                 
-                                // 2. The Answer Label (Read normally)
                                 Text("Answer:")
                                     .font(.headline)
                                     .foregroundColor(.gray)
                                     .accessibilityAddTraits(.isHeader)
                                 
-                                // 3. The Equation (Token-by-Token logic)
                                 if spellOutEquations {
                                     ScrollView(.horizontal, showsIndicators: false) {
                                         HStack(spacing: 2) {
-                                            let tokens = tokenizeEquation(steps[currentStepIndex].targetState) // <--- USE TOKENIZER HERE
+                                            let tokens = tokenizeEquation(steps[currentStepIndex].targetState)
                                             ForEach(Array(tokens.enumerated()), id: \.offset) { index, token in
                                                 Text(token)
                                                     .font(.system(size: equationTextSize, weight: .heavy, design: .monospaced))
@@ -131,7 +134,6 @@ struct AlgebraPracticeView: View {
                                         .foregroundColor(.blue)
                                 }
                                 
-                                // Hide Button
                                 Button(action: {
                                     showStep = false
                                 }) {
@@ -143,7 +145,6 @@ struct AlgebraPracticeView: View {
                             }
                             
                         } else {
-                            // HIDDEN STATE
                             Button(action: {
                                 showStep = true
                             }) {
@@ -165,7 +166,7 @@ struct AlgebraPracticeView: View {
                             .accessibilityHint("Press confirm to reveal the instruction and answer")
                         }
                         
-                        // Input Area
+                        // Scan the board to check current step.
                         if DataScannerViewController.isSupported && DataScannerViewController.isAvailable {
                             CameraScannerBox(recognizedText: $recognizedText)
                                 .frame(height: 250)
@@ -185,6 +186,7 @@ struct AlgebraPracticeView: View {
                                 .accessibilityLabel(feedbackMessage)
                         }
                         
+                        // Verify the scanned equation matches the target state.
                         Button(action: {
                             verifyStep()
                         }) {
@@ -202,7 +204,7 @@ struct AlgebraPracticeView: View {
                 }
             }
             
-            // PHASE 3: SUCCESS
+            // Phase 3: Success confirmation and restart.
             else if currentPhase == "success" {
                 VStack(spacing: 30) {
                     Image(systemName: "star.fill")
@@ -234,7 +236,7 @@ struct AlgebraPracticeView: View {
         }
     }
     
-    // MARK: - LOGIC FUNCTIONS
+    // Parse scanned text and prepare solving steps.
     func processInitialEquation() {
         let clean = recognizedText.lowercased().replacingOccurrences(of: " ", with: "")
         
@@ -250,6 +252,7 @@ struct AlgebraPracticeView: View {
         }
     }
     
+    // Compare OCR input with expected target state.
     func verifyStep() {
         let cleanInput = recognizedText.lowercased().replacingOccurrences(of: " ", with: "")
         let cleanTarget = steps[currentStepIndex].targetState.lowercased().replacingOccurrences(of: " ", with: "")
@@ -274,6 +277,7 @@ struct AlgebraPracticeView: View {
         }
     }
     
+    // Reset practice session to initial state.
     func resetPractice() {
         currentPhase = "input"
         recognizedText = ""
@@ -283,6 +287,7 @@ struct AlgebraPracticeView: View {
         showStep = false
     }
     
+    // Provide haptic feedback based on result.
     func triggerHaptic(success: Bool) {
         if enableHaptics {
             let generator = UINotificationFeedbackGenerator()
@@ -290,7 +295,7 @@ struct AlgebraPracticeView: View {
         }
     }
     
-    // <--- NEW TOKENIZER FUNCTION --->
+    // Split equation into tokens for accessible reading.
     func tokenizeEquation(_ equation: String) -> [String] {
         var tokens: [String] = []
         var currentNumber = ""
@@ -313,7 +318,7 @@ struct AlgebraPracticeView: View {
     }
 }
 
-// MARK: - MATH ENGINE
+// Lightweight linear equation solver for simple ax+b=c forms.
 struct EquationStep {
     let instruction: String
     let targetState: String

@@ -1,7 +1,12 @@
+// Project: BIT Algebra
+// Author: Jeremy Trafas
+// Date: 2026-05-01
+
 import SwiftUI
 
+// Teaching/verification demos listing.
 struct AlgebraTeachView: View {
-    // THE ENGINEERING POC CURRICULUM
+    // Predefined curriculum demos with target equations.
     let pocDemonstrations = [
         AlgebraLesson(
             title: "Demo 1: Character Baseline",
@@ -44,41 +49,63 @@ struct AlgebraTeachView: View {
             summary: "Test 3 Complete"
         ),
         AlgebraLesson(
-                title: "Demo 5: Multi-Line Complex",
-                steps: [
-                    AlgebraLessonStep(
-                        instruction: "Test 4: Multiple Lines (Complex). Create the equation below:",
-                        targetEquation: "(2^3)+8=16\n8+8=16\n16=16"
-                    )
-                ],
-                summary: "Test 4 Complete"
-            )
+            title: "Demo 5: Multi-Line Complex",
+            steps: [
+                AlgebraLessonStep(
+                    instruction: "Test 4: Multiple Lines (Complex). Create the equation below:",
+                    targetEquation: "(2^3)+8=16\n8+8=16\n16=16"
+                )
+            ],
+            summary: "Test 4 Complete"
+        ),
+        AlgebraLesson(
+            title: "Demo 6: Exponents Simple",
+            steps: [
+                AlgebraLessonStep(
+                    instruction: "Test 5: Exponents Simple Equation. Create the equation below:",
+                    targetEquation: "x^2=4"
+                )
+            ],
+            summary: "Test 5 Complete"
+        ),
+        AlgebraLesson(
+            title: "Demo 7: Sequential Equations",
+            steps: [
+                AlgebraLessonStep(
+                    instruction: "Test 6: Sequential Equations. Create the equations below:",
+                    targetEquation: "8+4=12\n1+2=3\nx+5=6"
+                )
+            ],
+            summary: "Test 6 Complete"
+        )
     ]
 
+    // List of demos navigating to session view.
     var body: some View {
-        NavigationView {
-            List(0..<pocDemonstrations.count, id: \.self) { index in
-                NavigationLink(destination: AlgebraLessonSessionView(curriculum: pocDemonstrations, lessonIndex: index)) {
-                    HStack {
-                        Image(systemName: "flask.fill")
-                            .foregroundColor(.purple)
-                            .font(.title2)
+        List(0..<pocDemonstrations.count, id: \.self) { index in
+            NavigationLink(destination: AlgebraLessonSessionView(curriculum: pocDemonstrations, lessonIndex: index)) {
+                // Row with icon and titles for each demo.
+                HStack {
+                    Image(systemName: "flask.fill")
+                        .foregroundColor(.purple)
+                        .font(.title2)
+                    
+                    VStack(alignment: .leading) {
+                        Text(pocDemonstrations[index].title)
+                            .font(.headline)
+                            .fixedSize(horizontal: false, vertical: true)
                         
-                        VStack(alignment: .leading) {
-                            Text(pocDemonstrations[index].title)
-                                .font(.headline)
-                                .fixedSize(horizontal: false, vertical: true)
-                            
-                            Text("Verification Trial")
-                                .font(.caption)
-                                .foregroundColor(.gray)
-                                .fixedSize(horizontal: false, vertical: true)
-                        }
+                        Text("Verification Trial")
+                            .font(.caption)
+                            .foregroundColor(.gray)
+                            .fixedSize(horizontal: false, vertical: true)
                     }
-                    .padding(.vertical, 8)
                 }
+                .padding(.vertical, 8)
             }
-            .navigationTitle("POC Verification")
         }
+        // Navigation title for the demos list.
+        .navigationTitle("POC Verification")
     }
 }
+
