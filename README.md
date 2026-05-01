@@ -18,11 +18,14 @@ All source code files within this repository require standard header blocks deno
 ## Software Architecture & Flowchart 
 * **Software Architecture** - Details the interactions of the 6 software components in the algebra module.
 
-<img width="708" height="428" alt="image" src="https://github.com/user-attachments/assets/cb1fdb19-f02e-450b-9b5e-48355f519d5b" />
+
+<img width="531" height="321" alt="image" src="https://github.com/user-attachments/assets/cb1fdb19-f02e-450b-9b5e-48355f519d5b" />
+
 
 * **Teach Mode Flowchart** - Details the step-by-step journey of a student using the algebra teach module.
 
-<img width="708" height="807" alt="image" src="https://github.com/user-attachments/assets/ae1c3f2e-81dc-4792-8b27-adb148e44c06" />
+
+<img width="470" height="484" alt="image" src="https://github.com/user-attachments/assets/ae1c3f2e-81dc-4792-8b27-adb148e44c06" />
 
 
 
